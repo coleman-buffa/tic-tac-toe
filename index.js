@@ -1,12 +1,17 @@
 /* Tic tac toe with command line input and output for two human players at the same keyboard
 
-Build comments, future plans, discussion points, etc
+This took roughly 6 hours to plan, code, and debug. This was my first attempt at making this game in any format.
+To save time I made use of Inquirer to simplify handling user input from the terminal. It would be instructive to attempt a build that uses no libraries.
+It would be instructive to develep a computer opponent. The basic version could play by selecting an available tile randomly.
+Implement a browser based GUI
+Implement online play with another human player on a different computer (websocket?)
 
 */
 
-//Import 
+//Import inquirer to aid in accepting and validating players' input
 const inquirer = require('inquirer');
 
+//Object will track the state of the game
 let board = {
   1: ' ',
   2: ' ',
@@ -19,6 +24,7 @@ let board = {
   9: ' '
 };
 
+//Array of possible win conditions
 const winPossibilities = [
   [1, 2, 3],
   [4, 5, 6],
@@ -30,10 +36,12 @@ const winPossibilities = [
   [3, 5, 7],
 ]
 
+//Mark the indicated position with the indicated letter
 function markBoard(position, letter) {
   board[position] = letter.toUpperCase();
 }
 
+//Output the board to the console
 function printBoard() {
   console.log('\n' +
     ' ' + board[1] + ' | ' + board[2] + ' | ' + board[3] + '\n' +
@@ -43,6 +51,7 @@ function printBoard() {
     ' ' + board[7] + ' | ' + board[8] + ' | ' + board[9] + '\n');
 }
 
+//Check to see the move the current player is attempting is an empty tile
 function validMove(position) {
   if (board[position] === ' ') {
     return true
@@ -51,6 +60,7 @@ function validMove(position) {
   }
 }
 
+//Check to see if the move just made wins the game by iterating through the win condition matrix, and counting the number of the given player's mark appears in any of the subarrays.
 function checkWin(player) {
   let count = 0;
   for (let i = 0; i < winPossibilities.length; i++) {
@@ -67,6 +77,7 @@ function checkWin(player) {
   return false
 }
 
+//Check to see if the game ends in a draw by verifying all the tiles are filled. This function is only ever called after checkWin to guarantee it will not be looking at a board state that contains a winning condition.
 function checkDraw() {
   for (const tile in board) {
     if (board[tile] === ' ') {
@@ -76,6 +87,7 @@ function checkDraw() {
   return true
 }
 
+//Runs the game by prompting the players for their input and calling the rest of the game controlling functions. The Inquirer package provides input validation to ensure that players enter only numbers 1-9.
 function takeTurn(player) {
   inquirer.prompt([
     {
@@ -96,9 +108,6 @@ function takeTurn(player) {
     }
   ]).then(function (response) {
     markBoard(response.playerMove, player);
-
-    //Logic to check for win or draw goes here otherwise the next player takes their turn
-    //Check win condition first?
     printBoard();
     if (checkWin(player)) {
       console.log(`${player} wins!`);
@@ -116,4 +125,5 @@ function takeTurn(player) {
   })
 }
 
+//Game on!
 takeTurn('X');
