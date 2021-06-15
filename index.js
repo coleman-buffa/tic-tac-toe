@@ -55,6 +55,12 @@ function takeTurn(player) {
     //Logic to check for win or draw goes here otherwise the next player takes their turn
 
     printBoard();
+
+    if (player === 'X') {
+      takeTurn('O');
+    } else {
+      takeTurn('X');
+    }
   })
 
 
