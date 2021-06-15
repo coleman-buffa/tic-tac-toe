@@ -8,15 +8,15 @@
 const inquirer = require('inquirer');
 
 let board = {
-  1: '',
-  2: '',
-  3: '',
-  4: '',
-  5: '',
-  6: '',
-  7: '',
-  8: '',
-  9: ''
+  1: ' ',
+  2: ' ',
+  3: ' ',
+  4: ' ',
+  5: ' ',
+  6: ' ',
+  7: ' ',
+  8: ' ',
+  9: ' '
 };
 
 function markBoard(position, letter) {
@@ -32,6 +32,14 @@ function printBoard() {
     ' ' + board[7] + ' | ' + board[8] + ' | ' + board[9] + '\n');
 }
 
+function validMove(position) {
+  if (board[position] === ' ') {
+    return true
+  } else {
+    return false
+  }
+}
+
 function takeTurn(player) {
   inquirer.prompt([
     {
@@ -39,11 +47,12 @@ function takeTurn(player) {
       type: 'number',
       message: 'Player ' + player + ': enter a number 1-9',
       validate: function (value) {
-        if (
-          value === 1 || value === 2 || value === 3 ||
-          value === 4 || value === 5 || value === 6 ||
-          value === 7 || value === 8 || value === 9) {
-          return true
+        if (value === 1 || value === 2 || value === 3 || value === 4 || value === 5 || value === 6 || value === 7 || value === 8 || value === 9) {
+          if (validMove(value)) {
+            return true
+          } else {
+            return 'Select an empty square for your play'
+          }
         } else {
           return 'Enter a number 1-9'
         }
