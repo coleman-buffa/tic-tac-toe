@@ -1,6 +1,6 @@
 /* Tic tac toe with command line input and output for two human players at the same keyboard
 
-
+Build comments, future plans, discussion points, etc
 
 */
 
@@ -67,6 +67,15 @@ function checkWin(player) {
   return false
 }
 
+function checkDraw() {
+  for (const tile in board) {
+    if (board[tile] === ' ') {
+      return false
+    }
+  }
+  return true
+}
+
 function takeTurn(player) {
   inquirer.prompt([
     {
@@ -95,16 +104,16 @@ function takeTurn(player) {
       console.log(`${player} wins!`);
       return
     }
-
-
+    if (checkDraw()) {
+      console.log('This game is a draw.');
+      return
+    }
     if (player === 'X') {
       takeTurn('O');
     } else {
       takeTurn('X');
     }
   })
-
-
 }
 
 takeTurn('X');
